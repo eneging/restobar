@@ -5,16 +5,15 @@ import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   Home, 
-  Store, 
-  BadgePercent, 
-  ShoppingBag, // Cambié ReceiptText por ShoppingBag (es más común para checkout/carrito)
+  Utensils, // Icono para La Carta (Comida)
+  Flame,    // Icono para Promos (Fuego)
+  ShoppingBag, 
   Sparkles
 } from "lucide-react";
 
 export default function BottomNav() {
   const pathname = usePathname();
 
-  // Definimos los links en un array para mantener el código limpio
   const navLinks = [
     {
       href: "/",
@@ -22,14 +21,14 @@ export default function BottomNav() {
       icon: Home,
     },
     {
-      href: "/store",
+      href: "/carta", // Coincide con el Navbar
       label: "La Carta",
-      icon: Store,
+      icon: Utensils,
     },
     {
       href: "/promociones",
-      label: "Ofertas",
-      icon: BadgePercent,
+      label: "Promos",
+      icon: Flame,
     },
     {
       href: "/checkout",
@@ -42,15 +41,11 @@ export default function BottomNav() {
     // Contenedor principal
     <div className="fixed bottom-0 left-0 right-0 z-[100] md:hidden pointer-events-none pb-safe">
       
-      {/* Efecto de gradiente inferior para suavizar la transición 
-         entre el contenido y la barra 
-      */}
+      {/* Efecto de gradiente inferior */}
       <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black via-black/80 to-transparent" />
 
-      {/* LA BARRA DE NAVEGACIÓN 
-         Usamos pointer-events-auto para reactivar los clicks solo en la barra
-      */}
-      <nav className="relative pointer-events-auto mx-4 mb-4 bg-zinc-900/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden">
+      {/* LA BARRA DE NAVEGACIÓN */}
+      <nav className="relative pointer-events-auto mx-4 mb-4 bg-[#111]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl shadow-black/80 overflow-hidden ring-1 ring-white/5">
         
         {/* Grid para distribuir equitativamente */}
         <div className="grid grid-cols-4 items-center h-16">
@@ -65,9 +60,7 @@ export default function BottomNav() {
                 href={link.href}
                 className="relative flex flex-col items-center justify-center h-full w-full group"
               >
-                {/* Fondo Animado del Activo (Glow Naranja) 
-                   Solo aparece si el link está activo
-                */}
+                {/* Fondo Animado del Activo (Glow Naranja Fuego) */}
                 {isActive && (
                   <motion.div
                     layoutId="nav-bubble"
@@ -86,7 +79,7 @@ export default function BottomNav() {
 
                 {/* Ícono con animación */}
                 <div className={`relative p-1.5 rounded-xl transition-all duration-300 ${
-                    isActive ? "text-orange-500 -translate-y-1" : "text-zinc-400 group-hover:text-zinc-200"
+                    isActive ? "text-orange-500 -translate-y-1" : "text-zinc-500 group-hover:text-zinc-200"
                 }`}>
                   <Icon 
                     size={22} 
@@ -94,12 +87,12 @@ export default function BottomNav() {
                     className={`transition-transform duration-300 ${isActive ? "scale-110 drop-shadow-[0_0_8px_rgba(249,115,22,0.5)]" : ""}`} 
                   />
                   
-                  {/* Partículas pequeñas si es ofertas (Detalle visual extra) */}
-                  {link.label === "Ofertas" && isActive && (
+                  {/* Partículas para Promos (Fuego) */}
+                  {link.label === "Promos" && isActive && (
                     <motion.div 
-                        animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
-                        transition={{ repeat: Infinity, duration: 2 }}
-                        className="absolute -top-1 -right-1 text-yellow-400"
+                        animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5], y: [0, -5, 0] }}
+                        transition={{ repeat: Infinity, duration: 1.5 }}
+                        className="absolute -top-2 -right-1 text-orange-400"
                     >
                         <Sparkles size={10} fill="currentColor" />
                     </motion.div>
@@ -107,8 +100,8 @@ export default function BottomNav() {
                 </div>
 
                 {/* Etiqueta de texto */}
-                <span className={`text-[10px] font-medium transition-all duration-300 ${
-                    isActive ? "text-white translate-y-0 opacity-100" : "text-zinc-500 translate-y-1 opacity-70"
+                <span className={`text-[10px] font-bold uppercase tracking-wide transition-all duration-300 ${
+                    isActive ? "text-white translate-y-0 opacity-100" : "text-zinc-600 translate-y-1 opacity-70"
                 }`}>
                   {link.label}
                 </span>

@@ -19,6 +19,8 @@ import {
   UtensilsCrossed,
   Gift,
   Book,
+  Flame,
+  MapPin
 } from "lucide-react";
 import SearchBar from "./SearchBar";
 
@@ -47,17 +49,18 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
+  // 1. CONFIGURACIÓN DE TIENDAS (Restobar Activo)
   const marketplaces = [
-    {
-      name: "Licorería",
-      href: "https://licoreria.puertoricoica.online",
-      icon: Wine,
-      active: true,
-    },
     {
       name: "Restobar",
       href: "https://restobar.puertoricoica.online",
       icon: UtensilsCrossed,
+      active: true, // <--- ACTIVO
+    },
+    {
+      name: "Licorería",
+      href: "https://licoreria.puertoricoica.online",
+      icon: Wine,
       active: false,
     },
     {
@@ -68,21 +71,22 @@ export default function Navbar() {
     },
   ];
 
+  // 2. ENLACES DEL RESTOBAR
   const navLinks = [
-    { name: "Ofertas 🔥", href: "/promociones", highlight: true },
-    { name: "Whiskys", href: "/categoria/whisky" },
-    { name: "Rones", href: "/categoria/ron" },
-    { name: "Piscos", href: "/categoria/piscos" },
-    { name: "Cervezas", href: "/categoria/cervezas" },
-    { name: "combos", href: "/combos" },
+    { name: "La Carta 🍔", href: "/carta", highlight: true },
+    { name: "Promos 🔥", href: "/promociones", highlight: true },
+    { name: "Hamburguesas", href: "/categoria/para-picar" },
+    { name: "Alitas", href: "/categoria/alitas" },
+    { name: "Para Picar", href: "/categoria/para-picar" },
+    { name: "Tragos", href: "/categoria/licores-y-spirits" },
   ];
 
   return (
     <>
-      {/* 1. TOP BAR (Oculto en móvil para ganar espacio) */}
-      <div className="hidden md:flex justify-between items-center bg-[#000000] text-[11px] py-2 px-6 md:px-10 border-b border-white/10 relative z-[7000]">
+      {/* 1. TOP BAR (Oculto en móvil) */}
+      <div className="hidden md:flex justify-between items-center bg-[#0a0a0a] text-[11px] py-2 px-6 md:px-10 border-b border-white/5 relative z-[7000]">
         <div className="flex items-center gap-6">
-           <span className="text-gray-500 font-bold uppercase tracking-wider">Nuestras Tiendas:</span>
+           <span className="text-zinc-500 font-bold uppercase tracking-wider">Nuestras Tiendas:</span>
            <div className="flex items-center gap-5">
               {marketplaces.map((m) => (
                 <a
@@ -94,41 +98,40 @@ export default function Navbar() {
                     m.active ? "opacity-100 cursor-default" : "opacity-50 hover:opacity-100"
                   }`}
                 >
-                  <m.icon size={14} className={m.active ? "text-amber-500" : "text-gray-400 group-hover:text-white"} />
-                  <span className={`font-medium ${m.active ? "text-amber-500" : "text-gray-300 group-hover:text-white"}`}>
+                  <m.icon size={14} className={m.active ? "text-orange-500" : "text-zinc-400 group-hover:text-white"} />
+                  <span className={`font-medium ${m.active ? "text-orange-500" : "text-zinc-300 group-hover:text-white"}`}>
                     {m.name}
                   </span>
-                  {!m.active && <ExternalLink size={10} className="text-gray-600" />}
+                  {!m.active && <ExternalLink size={10} className="text-zinc-600" />}
                 </a>
               ))}
            </div>
         </div>
-        <div className="flex items-center gap-4 text-gray-400">
-           <a href="/libro-reclamaciones" className="hover:text-white flex items-center gap-1 transition-colors">
-              <Book size={12} /> <span className="hidden lg:inline">Libro de Reclamaciones</span> 
+        <div className="flex items-center gap-4 text-zinc-400">
+           <a href="/reservas" className="hover:text-orange-400 flex items-center gap-1 transition-colors">
+              <Phone size={12} /> <span className="hidden lg:inline">Reservas:</span> 933 739 769
            </a>
-           <a href="tel:51933739769" className="hover:text-white flex items-center gap-1 transition-colors">
-              <Phone size={12} /> <span className="hidden lg:inline">Pedidos:</span> 933 739 769
-           </a>
-           <span className="text-gray-700">|</span>
-           <span className="text-amber-500 font-medium">Delivery Flash en Ica ⚡</span>
+           <span className="text-zinc-800">|</span>
+           <span className="text-orange-500 font-bold flex items-center gap-1">
+              <Flame size={12} className="animate-pulse" /> Delivery Caliente ⚡
+           </span>
         </div>
       </div>
 
       {/* 2. HEADER STICKY */}
       <header 
         className={`sticky top-0 w-full z-[9999] transition-all duration-300 border-b border-white/5 ${
-          scrolled ? "bg-[#050505]/95 backdrop-blur-md py-3 shadow-xl" : "bg-[#050505] py-4"
+          scrolled ? "bg-[#050505]/95 backdrop-blur-md py-2 shadow-xl shadow-orange-900/10" : "bg-[#050505] py-4"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 md:px-10 flex items-center justify-between gap-4">
           
-          {/* LOGO MEJORADO: Prioridad de carga y calidad máxima */}
-          <Link href="/" className="flex-shrink-0 relative z-20">
-            <div className="relative w-36 h-10 md:w-44 md:h-12">
+          {/* LOGO */}
+          <Link href="/" className="flex-shrink-0 relative z-20 group">
+            <div className="relative w-36 h-10 md:w-44 md:h-12 transition-transform group-hover:scale-105">
                 <Image
                 src="https://res.cloudinary.com/dck9uinqa/image/upload/v1765050033/logopuertoricoblanco_abvacb.svg"
-                alt="Puerto Rico Licorería"
+                alt="Puerto Rico Restobar"
                 fill
                 className="object-contain"
                 priority
@@ -137,17 +140,16 @@ export default function Navbar() {
             </div>
           </Link>
    
-              <span className="text-gray-700 ">|</span>
-          
-
           {/* MENÚ DE ESCRITORIO */}
           <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className={`text-sm font-medium transition-colors ${
-                  link.highlight ? "text-red-500 hover:text-red-400 font-bold" : "text-gray-300 hover:text-white"
+                className={`text-sm font-medium transition-all duration-200 ${
+                  link.highlight 
+                    ? "text-orange-500 hover:text-orange-400 font-bold uppercase tracking-wide hover:scale-105" 
+                    : "text-zinc-300 hover:text-white hover:tracking-wide"
                 }`}
               >
                 {link.name}
@@ -155,37 +157,29 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* ACCIONES (Carrito, Usuario, Menú Móvil) */}
+          {/* ACCIONES */}
           <div className="flex items-center gap-2 md:gap-4 flex-1 justify-end">
-            <div className="lg:block hidden ">
+            <div className="lg:block hidden w-full max-w-[200px] xl:max-w-[280px]">
                <SearchBar />
             </div>
             
             <div className="flex items-center gap-1 md:gap-3 border-l border-white/10 pl-2 md:pl-4">
-              <Link href="/login" className="hidden sm:block text-gray-400 hover:text-white transition p-2">
+              <Link href="/login" className="hidden sm:block text-zinc-400 hover:text-white transition p-2 hover:bg-white/5 rounded-full">
                 <User size={22} />
               </Link>
 
-              {/*
-              
-               <Link href="/wishlist" className="hidden sm:block text-gray-400 hover:text-amber-500 transition p-2">
-                <Heart size={22} />
-              </Link>
-              */ }
-             
-              
-              {/* Botón Carrito Mejorado */}
+              {/* Botón Carrito (Estilo Fuego) */}
               <button 
                 onClick={openDrawer} 
-                className="relative group flex items-center gap-2 bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white px-3 py-2 md:px-4 md:py-2 rounded-full transition-all shadow-lg hover:shadow-amber-500/20 active:scale-95"
+                className="relative group flex items-center gap-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white px-3 py-2 md:px-4 md:py-2 rounded-full transition-all shadow-lg shadow-orange-900/20 active:scale-95"
               >
-                <ShoppingCart size={18} className="fill-white/10" />
+                <ShoppingCart size={18} className="fill-white/20" />
                 <span className="font-bold text-sm">
                    {cart.length > 0 ? cart.reduce((acc, item) => acc + item.quantity, 0) : 0}
                 </span>
               </button>
 
-              {/* Botón Menú Móvil Mejorado (Área de toque más grande) */}
+              {/* Toggle Menú Móvil */}
               <button 
                 onClick={() => setMobileOpen(true)} 
                 className="lg:hidden text-white p-2 rounded-full active:bg-white/10 transition-colors"
@@ -197,20 +191,20 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Barra de búsqueda móvil separada para mejor acceso */}
+        {/* Buscador Móvil */}
         <div className="lg:hidden px-4 pb-2 pt-1">
             <SearchBar />
         </div>
       </header> 
 
-      {/* 3. MOBILE MENU (Fuera del Header) */}
+      {/* 3. MOBILE MENU */}
       {mobileOpen && (
           <div className="fixed inset-0 z-[99999] flex justify-end">
             <div 
               className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity"
               onClick={() => setMobileOpen(false)}
             />
-            <aside className="relative w-[85%] max-w-[320px] h-full bg-[#0f0f0f] text-white p-6 shadow-2xl flex flex-col border-l border-white/10 overflow-y-auto animate-in slide-in-from-right duration-300">
+            <aside className="relative w-[85%] max-w-[320px] h-full bg-[#0a0a0a] text-white p-6 shadow-2xl flex flex-col border-l border-white/10 overflow-y-auto animate-in slide-in-from-right duration-300">
               
               <div className="flex justify-between items-center mb-8">
                  <div className="relative w-32 h-8">
@@ -229,38 +223,41 @@ export default function Navbar() {
                  </button>
               </div>
 
-              {/* Links de Categorías */}
+              {/* Categorías Móvil */}
               <div className="space-y-1 mb-8">
-                <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3 ml-1">Navegación</p>
+                <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-3 ml-1">Menú</p>
                 {navLinks.map((l) => (
                   <Link
                     key={l.href}
                     href={l.href}
                     onClick={() => setMobileOpen(false)}
                     className={`py-3.5 px-4 rounded-xl flex justify-between items-center transition-colors active:scale-[0.98] ${
-                      l.highlight ? "bg-red-500/10 text-red-500 font-bold border border-red-500/20" : "bg-white/5 hover:bg-white/10 text-gray-200 border border-transparent"
+                      l.highlight 
+                      ? "bg-orange-500/10 text-orange-500 font-bold border border-orange-500/20" 
+                      : "bg-white/5 hover:bg-white/10 text-zinc-200 border border-transparent"
                     }`}
                   >
                     <span className="text-sm">{l.name}</span>
-                    {!l.highlight && <ChevronDown size={16} className="-rotate-90 text-gray-600" />}
+                    {!l.highlight && <ChevronDown size={16} className="-rotate-90 text-zinc-600" />}
                   </Link>
                 ))}
               </div>
 
-              {/* Enlaces de Usuario Móvil */}
+              {/* Acciones Móvil */}
               <div className="grid grid-cols-2 gap-3 mb-8">
                   <Link href="/login" onClick={() => setMobileOpen(false)} className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-xl border border-white/5 active:bg-white/10">
-                      <User size={20} className="mb-2 text-amber-500"/>
+                      <User size={20} className="mb-2 text-orange-500"/>
                       <span className="text-xs font-medium">Mi Cuenta</span>
                   </Link>
-                  <Link href="/wishlist" onClick={() => setMobileOpen(false)} className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-xl border border-white/5 active:bg-white/10">
-                      <Heart size={20} className="mb-2 text-red-500"/>
-                      <span className="text-xs font-medium">Favoritos</span>
-                  </Link>
+                  <a href="https://wa.me/51933739769" target="_blank" className="flex flex-col items-center justify-center p-4 bg-white/5 rounded-xl border border-white/5 active:bg-white/10">
+                      <Phone size={20} className="mb-2 text-green-500"/>
+                      <span className="text-xs font-medium">Reservar</span>
+                  </a>
               </div>
 
+              {/* Switcher de Tiendas Móvil */}
               <div className="mt-auto pt-6 border-t border-white/10">
-                 <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Otras Tiendas</p>
+                 <p className="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-3">Otras Tiendas</p>
                  <div className="grid grid-cols-2 gap-3">
                     {marketplaces.filter(m => !m.active).map(m => (
                         <a 
@@ -268,10 +265,10 @@ export default function Navbar() {
                             href={m.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex flex-col items-center justify-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-amber-500/30 active:bg-white/10 transition-all"
+                            className="flex flex-col items-center justify-center gap-2 p-3 bg-white/5 rounded-xl border border-white/5 hover:border-orange-500/30 active:bg-white/10 transition-all"
                         >
-                            <m.icon size={20} className="text-amber-500" />
-                            <div className="flex items-center gap-1 text-[10px] text-gray-300 font-medium">
+                            <m.icon size={20} className="text-zinc-400 group-hover:text-orange-500" />
+                            <div className="flex items-center gap-1 text-[10px] text-zinc-300 font-medium">
                                 {m.name} <ExternalLink size={8} />
                             </div>
                         </a>

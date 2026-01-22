@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Search, X, Loader2 } from "lucide-react";
+import { Search, X, Loader2, Flame, Utensils } from "lucide-react"; // Iconos temáticos
 import { autocompleteProducts } from "@/services/search.service";
 import { useClickOutside } from "@/app/hooks/useClickOutside";
 
-/* 🔥 INTERFAZ LOCAL (evita conflictos de tipos externos) */
+/* 🔥 INTERFAZ LOCAL */
 interface Product {
   id: number;
   name: string;
@@ -17,7 +17,7 @@ interface Product {
   category?: {
     id: number;
     name: string;
-    slug?: string; // slug opcional para evitar choque de tipos
+    slug?: string;
   } | null;
 }
 
@@ -29,10 +29,8 @@ export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  /* ✅ REF CORRECTO PARA <div> */
   const containerRef = useRef<HTMLDivElement>(null);
 
-  /* ✅ CAST SEGURO SOLO PARA EL HOOK */
   useClickOutside(
     containerRef as React.RefObject<HTMLElement>,
     () => setIsOpen(false)
@@ -96,12 +94,12 @@ export default function SearchBar() {
       className="relative w-full max-w-xl mx-auto z-50"
     >
       <form onSubmit={handleSubmit} className="relative group">
-        {/* INPUT */}
+        {/* INPUT ESTILO RESTOBAR (Orange Focus) */}
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => query.length >= 2 && setIsOpen(true)}
-          placeholder="Buscar ron, whisky..."
+          placeholder="Buscar hamburguesas, alitas, tragos..."
           className="w-full rounded-2xl bg-zinc-900 border border-zinc-800 text-white placeholder-zinc-500 py-3 pl-12 pr-10 outline-none transition-all duration-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 shadow-lg shadow-black/50"
         />
 
@@ -130,13 +128,13 @@ export default function SearchBar() {
       </form>
 
       {/* ============================
-          DROPDOWN
+          DROPDOWN SUGERENCIAS
       ============================ */}
       {isOpen && suggestions.length > 0 && (
-        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-950 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden">
+        <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-950 rounded-xl shadow-2xl border border-zinc-800 overflow-hidden ring-1 ring-white/10">
           <ul>
-            <li className="px-4 py-2 text-xs font-bold text-orange-500 uppercase bg-zinc-900/50 border-b border-zinc-800">
-              Sugerencias
+            <li className="px-4 py-2 text-xs font-bold text-orange-500 uppercase bg-orange-500/10 border-b border-zinc-800 flex items-center gap-2">
+              <Flame size={12} className="animate-pulse" /> Sugerencias
             </li>
 
             {suggestions.map((product) => (
@@ -149,8 +147,8 @@ export default function SearchBar() {
                   className="w-full flex items-center gap-3 px-4 py-3 hover:bg-zinc-900 transition-colors text-left group"
                 >
                   {/* IMAGEN */}
-                  <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden p-1 flex-shrink-0">
-                    {product.image_url ? (
+                  <div className="w-10 h-10 bg-white rounded-md flex items-center justify-center overflow-hidden p-1 flex-shrink-0 relative">
+                    {product.image_url && product.image_url.startsWith("http") ? (
                       <Image
                         src={product.image_url}
                         alt={product.name}
@@ -159,15 +157,16 @@ export default function SearchBar() {
                         className="object-contain"
                       />
                     ) : (
-                     
- <Image
-                        src= {`/assets/${product.category?.id}/${product.name}.png`}
+                      <Image
+                        src={`/assets/${product.category?.id}/${product.name}.png`}
                         alt={product.name}
                         width={40}
                         height={40}
                         className="object-contain"
-
-            ></Image>        
+                        onError={(e) => {
+                            e.currentTarget.style.display = 'none'; // Ocultar si falla
+                        }}
+                      />
                     )}
                   </div>
 
@@ -178,8 +177,8 @@ export default function SearchBar() {
                     </p>
 
                     {product.category?.name && (
-                      <p className="text-xs text-zinc-500">
-                        {product.category.name}
+                      <p className="text-xs text-zinc-500 flex items-center gap-1">
+                        <Utensils size={10} /> {product.category.name}
                       </p>
                     )}
                   </div>
